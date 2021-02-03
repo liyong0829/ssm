@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			    http://www.springframework.org/schema/beans/spring-beans.xsd
+			    http://www.springframework.org/schema/context
+			    http://www.springframework.org/schema/context/spring-context.xsd
+			    http://www.springframework.org/schema/mvc
+			    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--组件扫描  不然标签无法起作用-->
+    <context:component-scan base-package="com.itheima.controller"/>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/account/**"/>
+            <bean class="com.itheima.interceptors.PriviligesInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--mvc中还要配置两个处理器  处理器映射器 处理器适配器-->
+    <mvc:annotation-driven/>
+
+    <!--视图解析器 配置前缀和后缀-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--释放静态资源 凡是碰到静态资源就会交给默认的servlet去处理,也就是httpServlet-->
+    <mvc:default-servlet-handler/>
+</beans>

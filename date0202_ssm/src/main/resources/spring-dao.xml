@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--dao配置文件开始,和数据库做交互的, 所以首先必须要有连接池  使用druid阿里巴巴的连接池-->
+     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:///ssm"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+     </bean>
+
+    <!--配置生产SqlSession对象的工厂 , 必须先把连接池放进来,不然的话无法操作数据库,无法操作数据库那么SqlSession对象就无法创建-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置扫描pojo包,给包下的所有对象起别名-->
+        <property name="typeAliasesPackage" value="com.itheima.pojo"/>
+    </bean>
+
+        <!--扫描接口包路径,生产包下所有接口的代理对象,并且放入Spring容器中,一步生成对象放入容器中了,也不用被人调用了,所以不用id属性了-->
+     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+         <property name="basePackage" value="com.itheima.dao"/>
+     </bean>
+    <!--dao配置文件结束-->
+
+</beans>
